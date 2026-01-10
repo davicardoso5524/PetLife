@@ -64,6 +64,9 @@ db.serialize(() => {
         if (!row) {
             console.log('Iniciando migração de banco de dados para v2...');
             db.serialize(() => {
+                // Clean up any failed previous migration
+                db.run(`DROP TABLE IF EXISTS sales_new`);
+
                 db.run(`CREATE TABLE IF NOT EXISTS sales_new (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         date TEXT NOT NULL,
@@ -78,13 +81,24 @@ db.serialize(() => {
                 db.run(`INSERT INTO sales_new (date, amount)
                             SELECT date, amount FROM sales`, (err) => {
                     if (!err) {
-                        db.run(`DROP TABLE sales`);
-                        db.run(`ALTER TABLE sales_new RENAME TO sales`);
-                        db.run(`CREATE TABLE ${migrationFlag} (id INTEGER PRIMARY KEY)`);
-                        console.log('Migração v2 concluída.');
-                        checkV3(); // Chain next migration
+                        // Serializing the critical swap operations
+                        db.serialize(() => {
+                            db.run(`DROP TABLE IF EXISTS sales`);
+                            db.run(`ALTER TABLE sales_new RENAME TO sales`, (err) => {
+                                if (err) {
+                                    console.error('Error renaming table during v2 migration:', err);
+                                } else {
+                                    db.run(`CREATE TABLE ${migrationFlag} (id INTEGER PRIMARY KEY)`);
+                                    console.log('Migração v2 concluída com sucesso.');
+                                    checkV3();
+                                }
+                            });
+                        });
                     } else {
-                        console.error('Erro migração:', err);
+                        console.error('Erro migração (INSERT):', err);
+                        // Even if insert failed, we should probably check next versions or retry? 
+                        // For safety, let's proceed to checkV3 but log error.
+                        checkV3();
                     }
                 });
             });
