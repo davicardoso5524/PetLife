@@ -14,12 +14,6 @@ try {
 
 class UpdateHandler {
     constructor() {
-        // Don't initialize if not in Electron
-        if (!ipcRenderer) {
-            console.log('Update handler skipped (not in Electron)');
-            return;
-        }
-
         this.modal = null;
         this.currentVersion = null;
         this.newVersion = null;
@@ -30,18 +24,14 @@ class UpdateHandler {
     }
 
     async init() {
-        try {
-            // Get current app version
-            this.currentVersion = await ipcRenderer.invoke('get-app-version');
+        // Get current app version
+        this.currentVersion = await ipcRenderer.invoke('get-app-version');
 
-            // Setup IPC listeners
-            this.setupListeners();
+        // Setup IPC listeners
+        this.setupListeners();
 
-            // Create modal HTML
-            this.createModal();
-        } catch (error) {
-            console.error('Error initializing update handler:', error);
-        }
+        // Create modal HTML
+        this.createModal();
     }
 
     setupListeners() {
@@ -296,20 +286,12 @@ class UpdateHandler {
     }
 
     getSkippedVersions() {
-        try {
-            const stored = localStorage.getItem('skippedVersions');
-            return stored ? JSON.parse(stored) : [];
-        } catch (error) {
-            return [];
-        }
+        const stored = localStorage.getItem('skippedVersions');
+        return stored ? JSON.parse(stored) : [];
     }
 
     saveSkippedVersions() {
-        try {
-            localStorage.setItem('skippedVersions', JSON.stringify(this.skippedVersions));
-        } catch (error) {
-            console.error('Error saving skipped versions:', error);
-        }
+        localStorage.setItem('skippedVersions', JSON.stringify(this.skippedVersions));
     }
 }
 
