@@ -1,6 +1,6 @@
 {
   "name": "petlife",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Sistema de controle de vendas diárias para Petshop",
   "main": "main.js",
   "scripts": {
@@ -14,6 +14,7 @@
   "build": {
     "appId": "com.petlife.app",
     "productName": "PetLife",
+    "artifactName": "${productName}.Setup.${version}.${ext}",
     "directories": {
       "output": "dist"
     },
