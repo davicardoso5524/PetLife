@@ -1,6 +1,6 @@
 {
   "name": "petlife",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Sistema de controle de vendas diárias para Petshop",
   "main": "main.js",
   "scripts": {
