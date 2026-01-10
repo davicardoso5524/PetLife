@@ -72,7 +72,7 @@
 
 Baixe a versão mais recente do instalador Windows:
 
-👉 **[Download PetLife Setup.exe](https://github.com/davicardoso5524/petlife/releases/latest)**
+👉 **[Download PetLife Setup.exe](https://github.com/davicardoso5524/PetLife/releases/download/v1.0.0/PetLife.Setup.1.0.0.exe)**
 
 ### Passo 2: Obter Chave de Licença
 
