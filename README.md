@@ -80,7 +80,7 @@ Obtenha sua chave de licença **GRATUITA**:
 
 👉 **[Obter Chave Gratuita](https://petlife-licensing-platform.vercel.app/get-key)**
 
-> 💡 **Dica:** Você pode obter quantas chaves precisar, cada uma válida por 1 mês!
+> 💡 **Dica:** Você pode obter quantas chaves precisar, cada uma válida por 7 dias!
 
 ### Passo 3: Instalar e Ativar
 
@@ -146,7 +146,7 @@ O PetLife utiliza um sistema de licenciamento online para garantir atualizaçõe
 
 1. **Obtenha sua chave gratuita** em: https://petlife-licensing-platform.vercel.app/get-key
 2. **Ative no primeiro uso** - processo simples e rápido
-3. **Validade de 1 mês** - renove gratuitamente quando expirar
+3. **Validade de 7 dias** - renove gratuitamente quando expirar
 4. **Modo Offline** - funciona offline por até 30 dias após ativação
 
 ### Renovação
