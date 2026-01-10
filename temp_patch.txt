@@ -1,5 +1,0 @@
-        res.json({ message: 'Usuário deletado com sucesso' });
-    });
-});
-
-// --- LICENSING MODULE ---

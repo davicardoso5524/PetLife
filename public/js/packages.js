@@ -106,6 +106,7 @@ const closePackageModal = () => {
 // Unified Save (Create/Update)
 const savePackage = async (e) => {
     e.preventDefault();
+    console.log('📦 savePackage called');
 
     const id = document.getElementById('pkg-id').value;
     const pet_name = document.getElementById('pkg-pet').value;
@@ -116,11 +117,15 @@ const savePackage = async (e) => {
     const observation = document.getElementById('pkg-obs').value;
     const pet_photo_input = document.getElementById('pkg-photo-base64').value;
 
+    console.log('Form data:', { pet_name, owner_name, phone, price, created_at });
+
     // If editing and no new photo, keep original photo
     const pet_photo = pet_photo_input || originalPhoto || null;
 
     const method = id ? 'PUT' : 'POST';
-    const url = id ? `${API_URL}/packages/${id}` : `${API_URL}/packages`;
+    const url = id ? `${API_BASE}/packages/${id}` : `${API_BASE}/packages`;
+
+    console.log('Request:', { method, url });
 
     try {
         const res = await fetch(url, {
@@ -129,16 +134,21 @@ const savePackage = async (e) => {
             body: JSON.stringify({ pet_name, owner_name, phone, price, created_at, observation, pet_photo })
         });
 
+        console.log('Response status:', res.status);
+
         if (res.ok) {
+            const data = await res.json();
+            console.log('✅ Package saved:', data);
             showToast(id ? 'Pacote atualizado!' : 'Pacote criado com sucesso!');
             closePackageModal();
             loadPackages();
         } else {
             const err = await res.json();
+            console.error('❌ Error response:', err);
             showToast(err.error || 'Erro ao salvar pacote');
         }
     } catch (error) {
-        console.error(error);
+        console.error('❌ Fetch error:', error);
         showToast('Erro de conexão');
     }
 };
@@ -167,7 +177,7 @@ window.confirmDeletePackage = async () => {
     if (!id) return;
 
     try {
-        const res = await fetch(`${API_URL}/packages/${id}`, { method: 'DELETE' });
+        const res = await fetch(`${API_BASE}/packages/${id}`, { method: 'DELETE' });
         if (res.ok) {
             showToast('Pacote excluído.');
             closeDeleteModal();
@@ -185,7 +195,7 @@ const loadPackages = async (query = '') => {
     container.innerHTML = '<div class="empty-state">Carregando...</div>';
 
     try {
-        let url = `${API_URL}/packages`;
+        let url = `${API_BASE}/packages`;
         if (query) url += `?search=${encodeURIComponent(query)}`;
 
         const res = await fetch(url);
@@ -332,7 +342,7 @@ window.registerUsage = async (id, type, el) => {
     el.style.opacity = '0.5';
 
     try {
-        const res = await fetch(`${API_URL}/packages/${id}/usage`, {
+        const res = await fetch(`${API_BASE}/packages/${id}/usage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ service_type: type })
@@ -373,7 +383,7 @@ const setupSearch = () => {
 // Renew Package Function
 window.renewPackage = async (id) => {
     try {
-        const res = await fetch(`${API_URL}/packages/${id}/renew`, {
+        const res = await fetch(`${API_BASE}/packages/${id}/renew`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' }
         });

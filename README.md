@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![PetLife Logo](public/icon.png)
+![PetLife Banner](build/image_for_readme.png)
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/seu-usuario/petlife)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -200,7 +200,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 **Desenvolvido com ❤️ para facilitar a gestão de Petshops**
 
-- 📧 Email: contato@petlife.com
+- 📧 Email: cardosinho524@gmail.com
 - 🌐 Website: [petlife-licensing-platform.vercel.app](https://petlife-licensing-platform.vercel.app)
 
 ---
@@ -223,7 +223,7 @@ Encontrou um bug ou precisa de ajuda?
 
 - 🐛 [Reportar Bug](https://github.com/seu-usuario/petlife/issues/new?labels=bug)
 - 💡 [Solicitar Feature](https://github.com/seu-usuario/petlife/issues/new?labels=enhancement)
-- 📧 Email: suporte@petlife.com
+- 📧 Email: cardosinho524@gmail.com
 
 ---
 

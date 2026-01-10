@@ -19,6 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function checkSession(token) {
     try {
+        // Check if token is older than 24 hours
+        const loginTime = localStorage.getItem('petlife_login_time');
+        if (loginTime) {
+            const now = Date.now();
+            const elapsed = now - parseInt(loginTime);
+            const hours24 = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+            if (elapsed > hours24) {
+                console.log('ℹ️ Token expired (>24h), clearing session');
+                localStorage.removeItem('petlife_token');
+                localStorage.removeItem('petlife_user');
+                localStorage.removeItem('petlife_login_time');
+                return;
+            }
+        }
+
         const response = await fetch(`${API_BASE}/auth/check`, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -27,6 +43,7 @@ async function checkSession(token) {
 
         if (response.ok) {
             const data = await response.json();
+            console.log('✅ Session valid, auto-logging in');
             // Redirect based on user role
             if (data.user.role === 'admin') {
                 window.location.href = '/admin.html';
@@ -37,37 +54,62 @@ async function checkSession(token) {
             // Token invalid, clear it
             localStorage.removeItem('petlife_token');
             localStorage.removeItem('petlife_user');
+            localStorage.removeItem('petlife_login_time');
         }
     } catch (error) {
         console.error('Error checking session:', error);
         localStorage.removeItem('petlife_token');
         localStorage.removeItem('petlife_user');
+        localStorage.removeItem('petlife_login_time');
     }
 }
 
 function loadSavedCredentials() {
-    const savedUsername = localStorage.getItem('petlife_saved_username');
-    const savedPassword = localStorage.getItem('petlife_saved_password');
-    const rememberMe = localStorage.getItem('petlife_remember_me') === 'true';
+    try {
+        const savedUsername = localStorage.getItem('petlife_saved_username');
+        const savedPassword = localStorage.getItem('petlife_saved_password');
+        const rememberMe = localStorage.getItem('petlife_remember_me') === 'true';
 
-    if (rememberMe && savedUsername && savedPassword) {
-        document.getElementById('username').value = savedUsername;
-        document.getElementById('password').value = savedPassword;
-        document.getElementById('rememberMe').checked = true;
+        console.log('Loading saved credentials:', { savedUsername, hasPassword: !!savedPassword, rememberMe });
+
+        if (rememberMe && savedUsername && savedPassword) {
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const rememberMeCheckbox = document.getElementById('rememberMe');
+
+            if (usernameInput) usernameInput.value = savedUsername;
+            if (passwordInput) passwordInput.value = savedPassword;
+            if (rememberMeCheckbox) rememberMeCheckbox.checked = true;
+
+            console.log('✅ Credentials loaded successfully');
+        } else {
+            console.log('ℹ️ No saved credentials found');
+        }
+    } catch (error) {
+        console.error('❌ Error loading credentials:', error);
     }
 }
 
 function saveCredentials(username, password, remember) {
-    if (remember) {
-        localStorage.setItem('petlife_saved_username', username);
-        localStorage.setItem('petlife_saved_password', password);
-        localStorage.setItem('petlife_remember_me', 'true');
-    } else {
-        localStorage.removeItem('petlife_saved_username');
-        localStorage.removeItem('petlife_saved_password');
-        localStorage.removeItem('petlife_remember_me');
+    try {
+        console.log('Saving credentials:', { username, hasPassword: !!password, remember });
+
+        if (remember) {
+            localStorage.setItem('petlife_saved_username', username);
+            localStorage.setItem('petlife_saved_password', password);
+            localStorage.setItem('petlife_remember_me', 'true');
+            console.log('✅ Credentials saved to localStorage');
+        } else {
+            localStorage.removeItem('petlife_saved_username');
+            localStorage.removeItem('petlife_saved_password');
+            localStorage.removeItem('petlife_remember_me');
+            console.log('ℹ️ Credentials removed from localStorage');
+        }
+    } catch (error) {
+        console.error('❌ Error saving credentials:', error);
     }
 }
+
 
 async function handleLogin(e) {
     e.preventDefault();
@@ -107,6 +149,7 @@ async function handleLogin(e) {
             // Login successful
             localStorage.setItem('petlife_token', data.token);
             localStorage.setItem('petlife_user', JSON.stringify(data.user));
+            localStorage.setItem('petlife_login_time', Date.now().toString());
 
             // Save credentials if remember me is checked
             saveCredentials(username, password, rememberMe);

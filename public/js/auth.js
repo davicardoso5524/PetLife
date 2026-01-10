@@ -92,6 +92,7 @@ function confirmLogout() {
     }).finally(() => {
         localStorage.removeItem('petlife_token');
         localStorage.removeItem('petlife_user');
+        localStorage.removeItem('petlife_login_time');
         window.location.href = '/index.html';
     });
 }
