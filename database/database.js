@@ -1,7 +1,28 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
+const fs = require('fs');
 
-const dbPath = path.resolve(__dirname, 'petlife.db');
+let dbPath;
+
+// Determine correct database path based on environment
+if (process.versions.electron) {
+    // Running in Electron: use userData directory (App Data)
+    // Needs to dynamically require electron to avoid build issues if ran outside
+    const { app } = require('electron');
+    const userDataPath = app.getPath('userData');
+
+    // Ensure directory exists
+    if (!fs.existsSync(userDataPath)) {
+        fs.mkdirSync(userDataPath, { recursive: true });
+    }
+
+    dbPath = path.join(userDataPath, 'petlife.db');
+    console.log('Using Production Database Path:', dbPath);
+} else {
+    // Running in Dev/Node: use local file
+    dbPath = path.resolve(__dirname, 'petlife.db');
+    console.log('Using Development Database Path:', dbPath);
+}
 
 const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
