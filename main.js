@@ -3,6 +3,8 @@ const path = require('path');
 const { startServer } = require('./server');
 const { checkLicenseOnStartup, validateLicense, getStoredLicense } = require('./services/licenseService');
 const { getHashedMachineId } = require('./utils/machineId');
+const { checkForUpdates, downloadUpdate, installUpdate, setupAutoUpdater } = require('./services/updateService');
+
 
 let mainWindow;
 let activationWindow;
@@ -56,6 +58,17 @@ function createMainWindow(licenseInfo) {
     } else {
         console.log('✓ Licença válida');
     }
+
+    // Setup auto-updater
+    setupAutoUpdater(mainWindow);
+
+    // Check for updates after window is ready
+    mainWindow.webContents.once('did-finish-load', () => {
+        // Wait 3 seconds before checking for updates
+        setTimeout(() => {
+            checkForUpdates(mainWindow);
+        }, 3000);
+    });
 
     // Prevent new windows from opening
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -181,6 +194,28 @@ ipcMain.on('maximize-window', () => {
         mainWindow.maximize();
     }
 });
+
+// Update IPC Handlers
+ipcMain.on('check-for-updates', () => {
+    if (mainWindow) {
+        checkForUpdates(mainWindow);
+    }
+});
+
+ipcMain.on('download-update', () => {
+    if (mainWindow) {
+        downloadUpdate(mainWindow);
+    }
+});
+
+ipcMain.on('install-update', () => {
+    installUpdate();
+});
+
+ipcMain.handle('get-app-version', () => {
+    return app.getVersion();
+});
+
 
 app.on('ready', createWindow);
 

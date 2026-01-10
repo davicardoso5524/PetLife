@@ -1,6 +1,6 @@
 {
   "name": "petlife",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Sistema de controle de vendas diárias para Petshop",
   "main": "main.js",
   "scripts": {
@@ -25,6 +25,7 @@
       "public/**/*",
       "routes/**/*",
       "services/**/*",
+      "middleware/**/*",
       "utils/**/*",
       "node_modules/**/*",
       "package.json"
@@ -46,7 +47,14 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "PetLife",
-      "deleteAppDataOnUninstall": false
+      "deleteAppDataOnUninstall": false,
+      "allowElevation": true,
+      "perMachine": false
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "davicardoso5524",
+      "repo": "PetLife"
     }
   },
   "dependencies": {
@@ -59,7 +67,9 @@
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
+    "electron-log": "^5.4.3",
     "electron-store": "^11.0.2",
+    "electron-updater": "^6.7.3",
     "express": "^4.18.2",
     "framer-motion": "^12.24.7",
     "lucide-react": "^0.562.0",
