@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petlife - Contas a Pagar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar / Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-paw"></i>
+                <span>PetLife</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                <li><a href="packages.html"><i class="fa-solid fa-box-open"></i> Pacotes</a></li>
+                <li><a href="expenses.html"><i class="fa-solid fa-wallet"></i> Despesas</a></li>
+                <li class="active"><a href="bills-overview.html"><i class="fa-solid fa-file-invoice-dollar"></i> Contas
+                        a Pagar</a></li>
+                <li><a href="reports.html"><i class="fa-solid fa-chart-line"></i> Relatórios</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header>
+                <div style="display:flex; align-items:center;">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <h1><i class="fa-solid fa-file-invoice-dollar"></i> Contas a Pagar</h1>
+                        <p class="subtitle">Visão anual das suas contas</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Year Selector -->
+            <section style="margin-top:2rem;">
+                <div class="month-selector" style="justify-content:center;">
+                    <button id="prev-year" class="month-nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span id="current-year" style="font-size:2rem; font-weight:700; padding:0 3rem;">2026</span>
+                    <button id="next-year" class="month-nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </section>
+
+            <!-- Annual Summary Cards -->
+            <section class="dashboard-cards" style="margin-top:2rem;">
+                <div class="card card-total">
+                    <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="card-info">
+                        <h3>Total do Ano</h3>
+                        <p class="amount" id="year-total">R$ 0,00</p>
+                        <small id="year-count">0 contas</small>
+                    </div>
+                </div>
+                <div class="card card-warning">
+                    <div class="card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="card-info">
+                        <h3>Pendente</h3>
+                        <p class="amount" id="year-pending">R$ 0,00</p>
+                        <small id="year-pending-count">0 contas</small>
+                    </div>
+                </div>
+                <div class="card card-success">
+                    <div class="card-icon"><i class="fa-solid fa-check-circle"></i></div>
+                    <div class="card-info">
+                        <h3>Pago</h3>
+                        <p class="amount" id="year-paid">R$ 0,00</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Monthly Bills Grid -->
+            <section style="margin-top:3rem;">
+                <div id="bills-monthly-grid" class="monthly-bills-grid">
+                    <!-- Monthly cards will be injected here -->
+                </div>
+            </section>
+        </main>
+    </div>
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="logout-modal-content modal-content">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h2>Sair do Sistema?</h2>
+            <p>Você será desconectado e precisará fazer login novamente para acessar o sistema.</p>
+            <div class="logout-actions">
+                <button type="button" class="btn-cancel-logout" onclick="cancelLogout()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-logout" id="btn-confirm-logout" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="logout-modal-content modal-content">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h2>Sair do Sistema?</h2>
+            <p>Você será desconectado e precisará fazer login novamente para acessar o sistema.</p>
+            <div class="logout-actions">
+                <button type="button" class="btn-cancel-logout" onclick="cancelLogout()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-logout" id="btn-confirm-logout" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="logout-modal-content modal-content">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h2>Sair do Sistema?</h2>
+            <p>Você será desconectado e precisará fazer login novamente para acessar o sistema.</p>
+            <div class="logout-actions">
+                <button type="button" class="btn-cancel-logout" onclick="cancelLogout()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-logout" id="btn-confirm-logout" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/bills-overview.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petlife - Contas a Pagar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar / Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-paw"></i>
+                <span>PetLife</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                <li><a href="packages.html"><i class="fa-solid fa-box-open"></i> Pacotes</a></li>
+                <li><a href="expenses.html"><i class="fa-solid fa-wallet"></i> Despesas</a></li>
+                <li><a href="bills-overview.html"><i class="fa-solid fa-file-invoice-dollar"></i> Contas a
+                        Pagar</a></li>
+                <li><a href="reports.html"><i class="fa-solid fa-chart-line"></i> Relatórios</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="bills-header">
+                <div class="header-top">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="header-title">
+                        <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+                            <a href="bills-overview.html"
+                                style="color:var(--text-muted); text-decoration:none; font-size:0.9rem; display:flex; align-items:center; gap:0.3rem;">
+                                <i class="fa-solid fa-arrow-left"></i> Voltar
+                            </a>
+                            <span style="color:var(--text-muted);">/</span>
+                            <span style="color:var(--text-muted); font-size:0.9rem;" id="breadcrumb-month">Janeiro
+                                2026</span>
+                        </div>
+                        <h1><i class="fa-solid fa-file-invoice-dollar"></i> Contas a Pagar</h1>
+                        <p class="subtitle" id="month-subtitle">Janeiro 2026</p>
+                    </div>
+                </div>
+
+                <!-- New Bill Button (Full Width) -->
+                <button id="btn-new-bill" class="btn-new-bill">
+                    <i class="fa-solid fa-plus"></i> Nova Conta
+                </button>
+
+                <!-- Month Selector -->
+                <div class="month-selector-bills">
+                    <button id="prev-month" class="month-nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <select id="month-select" class="month-input">
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                    <select id="year-select" class="month-input"></select>
+                    <button id="next-month" class="month-nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+            </header>
+
+            <!-- Summary Cards -->
+            <section class="dashboard-cards" style="margin-top:2rem;">
+                <div class="card card-total">
+                    <div class="card-icon"><i class="fa-solid fa-file-invoice"></i></div>
+                    <div class="card-info">
+                        <h3>Total Pendente</h3>
+                        <p class="amount" id="summary-pending">R$ 0,00</p>
+                        <small id="summary-pending-count">0 contas</small>
+                    </div>
+                </div>
+                <div class="card card-danger">
+                    <div class="card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="card-info">
+                        <h3>Vencidas</h3>
+                        <p class="amount" id="summary-overdue">R$ 0,00</p>
+                        <small id="summary-overdue-count">0 contas</small>
+                    </div>
+                </div>
+                <div class="card card-warning">
+                    <div class="card-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div class="card-info">
+                        <h3>Próx. 7 Dias</h3>
+                        <p class="amount" id="summary-upcoming">R$ 0,00</p>
+                        <small id="summary-upcoming-count">0 contas</small>
+                    </div>
+                </div>
+                <div class="card card-success">
+                    <div class="card-icon"><i class="fa-solid fa-check-circle"></i></div>
+                    <div class="card-info">
+                        <h3>Pagas</h3>
+                        <p class="amount" id="summary-paid">R$ 0,00</p>
+                        <small id="summary-paid-count">0 contas</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filters -->
+            <section style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+                <div class="search-bar-wrapper" style="flex:1; min-width:300px; position:relative;">
+                    <i class="fa-solid fa-magnifying-glass"
+                        style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:1rem;"></i>
+                    <input type="text" id="search-input" placeholder="Buscar por descrição, fornecedor..."
+                        style="width:100%; padding:0.9rem 1rem 0.9rem 2.8rem; border:2px solid #e2e8f0; border-radius:12px; font-size:1rem; transition:all 0.2s ease; background:#f8fafc;">
+                </div>
+                <select id="status-filter" class="month-input" style="min-width:150px;">
+                    <option value="all">Todos status</option>
+                    <option value="pending">Pendentes</option>
+                    <option value="paid">Pagas</option>
+                </select>
+                <select id="category-filter" class="month-input" style="min-width:180px;">
+                    <option value="all">Todas categorias</option>
+                    <option value="fornecedores">Fornecedores</option>
+                    <option value="servicos">Serviços</option>
+                    <option value="aluguel">Aluguel</option>
+                    <option value="outros">Outros</option>
+                </select>
+            </section>
+
+            <!-- Bills List -->
+            <section id="bills-container" style="margin-top:2rem;">
+                <!-- Bills will be injected here -->
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal: Nova/Editar Conta -->
+    <div id="bill-modal" class="modal">
+        <div class="modal-content premium-modal">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="bill-modal-title">Nova Conta</h2>
+                    <p class="modal-subtitle">Registre uma conta a pagar</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeBillModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <form id="bill-form" class="premium-form">
+                <input type="hidden" id="bill-id">
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Descrição *</label>
+                        <input type="text" id="bill-description" placeholder="Ex: Fornecedor de materiais" required>
+                    </div>
+                </div>
+
+                <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div class="input-wrapper">
+                        <label>Valor *</label>
+                        <input type="number" id="bill-amount" step="0.01" min="0" placeholder="0,00" required>
+                    </div>
+                    <div class="input-wrapper">
+                        <label>Vencimento *</label>
+                        <input type="date" id="bill-due-date" required>
+                    </div>
+                </div>
+
+                <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div class="input-wrapper">
+                        <label>Categoria</label>
+                        <select id="bill-category">
+                            <option value="">Selecione...</option>
+                            <option value="fornecedores">Fornecedores</option>
+                            <option value="servicos">Serviços</option>
+                            <option value="aluguel">Aluguel</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <label>Fornecedor</label>
+                        <input type="text" id="bill-supplier" placeholder="Nome do fornecedor">
+                    </div>
+                </div>
+
+                <!-- Installment Section -->
+                <div class="form-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="bill-installment-check">
+                        <span>Dividir em parcelas</span>
+                    </label>
+                </div>
+
+                <div class="form-row" id="installment-row" style="display:none;">
+                    <div class="input-wrapper">
+                        <label>Número de parcelas</label>
+                        <select id="bill-installments">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                            <option value="5">5x</option>
+                            <option value="6">6x</option>
+                            <option value="7">7x</option>
+                            <option value="8">8x</option>
+                            <option value="9">9x</option>
+                            <option value="10">10x</option>
+                            <option value="11">11x</option>
+                            <option value="12">12x</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Observações</label>
+                        <textarea id="bill-notes" rows="3" placeholder="Observações adicionais..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeBillModal()">Cancelar</button>
+                    <button type="submit" class="btn-save-premium">
+                        Salvar <i class="fa-solid fa-check"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content premium-modal" style="max-width: 450px;">
+            <div class="modal-header" style="border-bottom: 2px solid #fee2e2;">
+                <div>
+                    <h2 class="modal-title" style="color: #dc2626; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span id="confirm-title">Confirmar Exclusão</span>
+                    </h2>
+                    <p class="modal-subtitle" id="confirm-message">Tem certeza que deseja excluir esta conta?</p>
+                </div>
+            </div>
+
+            <div style="padding: 1.5rem; background: #fef2f2; border-radius: 12px; margin: 1.5rem 0;">
+                <p style="color: #991b1b; font-size: 0.9rem; display: flex; align-items: start; gap: 0.5rem;">
+                    <i class="fa-solid fa-info-circle" style="margin-top: 0.2rem;"></i>
+                    <span>Esta ação não pode ser desfeita. A conta será permanentemente removida do sistema.</span>
+                </p>
+            </div>
+
+            <div class="modal-footer" style="gap: 1rem;">
+                <button type="button" class="btn-secondary" onclick="closeConfirmModal()" style="flex: 1;">
+                    <i class="fa-solid fa-times"></i> Cancelar
+                </button>
+                <button type="button" class="btn-danger" id="confirm-action-btn"
+                    style="flex: 1; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white; border: none;">
+                    <i class="fa-solid fa-trash"></i> Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Salvo com sucesso!</div>
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="logout-modal-content modal-content">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h2>Sair do Sistema?</h2>
+            <p>Você será desconectado e precisará fazer login novamente para acessar o sistema.</p>
+            <div class="logout-actions">
+                <button type="button" class="btn-cancel-logout" onclick="cancelLogout()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-logout" id="btn-confirm-logout" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                    <p class="amount" id="summary-overdue">R$ 0,00</p>
+                    <small id="summary-overdue-count">0 contas</small>
+            </div>
+        </div>
+        <div class="card card-warning">
+            <div class="card-icon"><i class="fa-solid fa-clock"></i></div>
+            <div class="card-info">
+                <h3>Próx. 7 Dias</h3>
+                <p class="amount" id="summary-upcoming">R$ 0,00</p>
+                <small id="summary-upcoming-count">0 contas</small>
+            </div>
+        </div>
+        <div class="card card-success">
+            <div class="card-icon"><i class="fa-solid fa-check-circle"></i></div>
+            <div class="card-info">
+                <h3>Pagas</h3>
+                <p class="amount" id="summary-paid">R$ 0,00</p>
+                <small id="summary-paid-count">0 contas</small>
+            </div>
+        </div>
+        </section>
+
+        <!-- Filters -->
+        <section style="margin-top:2rem; display:flex; gap:1rem; flex-wrap:wrap; align-items:center;">
+            <div class="search-bar-wrapper" style="flex:1; min-width:300px; position:relative;">
+                <i class="fa-solid fa-magnifying-glass"
+                    style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:1rem;"></i>
+                <input type="text" id="search-input" placeholder="Buscar por descrição, fornecedor..."
+                    style="width:100%; padding:0.9rem 1rem 0.9rem 2.8rem; border:2px solid #e2e8f0; border-radius:12px; font-size:1rem; transition:all 0.2s ease; background:#f8fafc;">
+            </div>
+            <select id="status-filter" class="month-input" style="min-width:150px;">
+                <option value="all">Todos status</option>
+                <option value="pending">Pendentes</option>
+                <option value="paid">Pagas</option>
+            </select>
+            <select id="category-filter" class="month-input" style="min-width:180px;">
+                <option value="all">Todas categorias</option>
+                <option value="fornecedores">Fornecedores</option>
+                <option value="servicos">Serviços</option>
+                <option value="aluguel">Aluguel</option>
+                <option value="outros">Outros</option>
+            </select>
+        </section>
+
+        <!-- Bills List -->
+        <section id="bills-container" style="margin-top:2rem;">
+            <!-- Bills will be injected here -->
+        </section>
+        </main>
+    </div>
+
+    <!-- Modal: Nova/Editar Conta -->
+    <div id="bill-modal" class="modal">
+        <div class="modal-content premium-modal">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="bill-modal-title">Nova Conta</h2>
+                    <p class="modal-subtitle">Registre uma conta a pagar</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeBillModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <form id="bill-form" class="premium-form">
+                <input type="hidden" id="bill-id">
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Descrição *</label>
+                        <input type="text" id="bill-description" placeholder="Ex: Fornecedor de materiais" required>
+                    </div>
+                </div>
+
+                <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div class="input-wrapper">
+                        <label>Valor *</label>
+                        <input type="number" id="bill-amount" step="0.01" min="0" placeholder="0,00" required>
+                    </div>
+                    <div class="input-wrapper">
+                        <label>Vencimento *</label>
+                        <input type="date" id="bill-due-date" required>
+                    </div>
+                </div>
+
+                <div class="form-row" style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div class="input-wrapper">
+                        <label>Categoria</label>
+                        <select id="bill-category">
+                            <option value="">Selecione...</option>
+                            <option value="fornecedores">Fornecedores</option>
+                            <option value="servicos">Serviços</option>
+                            <option value="aluguel">Aluguel</option>
+                            <option value="outros">Outros</option>
+                        </select>
+                    </div>
+                    <div class="input-wrapper">
+                        <label>Fornecedor</label>
+                        <input type="text" id="bill-supplier" placeholder="Nome do fornecedor">
+                    </div>
+                </div>
+
+                <!-- Installment Section -->
+                <div class="form-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="bill-installment-check">
+                        <span>Dividir em parcelas</span>
+                    </label>
+                </div>
+
+                <div class="form-row" id="installment-row" style="display:none;">
+                    <div class="input-wrapper">
+                        <label>Número de parcelas</label>
+                        <select id="bill-installments">
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                            <option value="5">5x</option>
+                            <option value="6">6x</option>
+                            <option value="7">7x</option>
+                            <option value="8">8x</option>
+                            <option value="9">9x</option>
+                            <option value="10">10x</option>
+                            <option value="11">11x</option>
+                            <option value="12">12x</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Observações</label>
+                        <textarea id="bill-notes" rows="3" placeholder="Observações adicionais..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeBillModal()">Cancelar</button>
+                    <button type="submit" class="btn-save-premium">
+                        Salvar <i class="fa-solid fa-check"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal">
+        <div class="modal-content premium-modal" style="max-width: 450px;">
+            <div class="modal-header" style="border-bottom: 2px solid #fee2e2;">
+                <div>
+                    <h2 class="modal-title" style="color: #dc2626; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span id="confirm-title">Confirmar Exclusão</span>
+                    </h2>
+                    <p class="modal-subtitle" id="confirm-message">Tem certeza que deseja excluir esta conta?</p>
+                </div>
+            </div>
+
+            <div style="padding: 1.5rem; background: #fef2f2; border-radius: 12px; margin: 1.5rem 0;">
+                <p style="color: #991b1b; font-size: 0.9rem; display: flex; align-items: start; gap: 0.5rem;">
+                    <i class="fa-solid fa-info-circle" style="margin-top: 0.2rem;"></i>
+                    <span>Esta ação não pode ser desfeita. A conta será permanentemente removida do sistema.</span>
+                </p>
+            </div>
+
+            <div class="modal-footer" style="gap: 1rem;">
+                <button type="button" class="btn-secondary" onclick="closeConfirmModal()" style="flex: 1;">
+                    <i class="fa-solid fa-times"></i> Cancelar
+                </button>
+                <button type="button" class="btn-danger" id="confirm-action-btn"
+                    style="flex: 1; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white; border: none;">
+                    <i class="fa-solid fa-trash"></i> Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Salvo com sucesso!</div>
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="logout-modal-content modal-content">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h2>Sair do Sistema?</h2>
+            <p>Você será desconectado e precisará fazer login novamente para acessar o sistema.</p>
+            <div class="logout-actions">
+                <button type="button" class="btn-cancel-logout" onclick="cancelLogout()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-logout" id="btn-confirm-logout" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/bills.js"></script>
+</body>
+
+</html>

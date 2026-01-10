@@ -1,0 +1,88 @@
+{
+  "name": "petlife",
+  "version": "1.0.0",
+  "description": "Sistema de controle de vendas diárias para Petshop",
+  "main": "main.js",
+  "scripts": {
+    "start": "node --watch server.js",
+    "dev": "node server.js",
+    "electron": "electron .",
+    "electron:dev": "electron .",
+    "package": "electron-packager . Petlife --platform=win32 --arch=x64 --out=release --overwrite --icon=public/icon.png",
+    "build": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.petlife.app",
+    "productName": "PetLife",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "server.js",
+      "preload.js",
+      "database/**/*",
+      "public/**/*",
+      "routes/**/*",
+      "services/**/*",
+      "utils/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "PetLife",
+      "deleteAppDataOnUninstall": false
+    }
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.90.16",
+    "@vitejs/plugin-react": "^5.1.2",
+    "autoprefixer": "^10.4.23",
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^1.20.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "electron-store": "^11.0.2",
+    "express": "^4.18.2",
+    "framer-motion": "^12.24.7",
+    "lucide-react": "^0.562.0",
+    "node-machine-id": "^1.1.12",
+    "postcss": "^8.5.6",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router-dom": "^7.11.0",
+    "sonner": "^2.0.7",
+    "sqlite3": "^5.1.7",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.18",
+    "tailwindcss-animate": "^1.0.7",
+    "vite": "^7.3.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@electron/rebuild": "^4.0.2",
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12",
+    "electron-packager": "^17.1.2",
+    "electron-winstaller": "^5.4.0",
+    "png-to-ico": "^3.0.1"
+  }
+}

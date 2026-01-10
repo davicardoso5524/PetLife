@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ativação de Licença - PetLife</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .activation-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .key-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            font-family: 'Courier New', monospace;
+        }
+
+        .key-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .key-input::placeholder {
+            color: #ccc;
+            font-weight: normal;
+            letter-spacing: 1px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .machine-id-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+        }
+
+        .machine-id-info strong {
+            color: #333;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .help-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #999;
+        }
+
+        .help-text a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .activation-container {
+                padding: 30px 20px;
+            }
+
+            .logo h1 {
+                font-size: 28px;
+            }
+
+            .key-input {
+                font-size: 14px;
+                padding: 12px;
+                letter-spacing: 1px;
+            }
+
+            .btn {
+                padding: 12px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .activation-container {
+                padding: 25px 15px;
+            }
+
+            .logo h1 {
+                font-size: 24px;
+            }
+
+            .key-input {
+                font-size: 13px;
+                padding: 10px;
+            }
+        }
+
+        .license-status-info {
+            background: #f0f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .license-status-info strong {
+            color: #333;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .license-status-info p {
+            margin: 5px 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 12px;
+            margin: 8px 0;
+        }
+
+        .status-badge.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.expired {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-badge.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .offline-info {
+            background: #f0f9ff;
+            padding: 10px;
+            border-radius: 6px;
+            border-left: 3px solid #0c5460;
+            margin-top: 10px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .offline-info strong {
+            font-weight: 600;
+        }
+
+        #offlineBtn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        #offlineBtn i {
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="activation-container">
+        <div class="logo">
+            <h1>🐾 PetLife</h1>
+            <p>Ativação de Licença</p>
+        </div>
+
+        <div id="message" class="message"></div>
+
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #666;">Validando licença...</p>
+        </div>
+
+        <form id="activationForm">
+            <div class="form-group">
+                <label for="licenseKey">Chave de Licença</label>
+                <input type="text" class="key-input" id="licenseKey" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19"
+                    required autocomplete="off">
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="activateBtn">
+                Ativar Licença
+            </button>
+
+            <button type="button" class="btn btn-secondary" id="offlineBtn" style="display: none;">
+                <i class="fa-solid fa-wifi-slash"></i> Usar Modo Offline (Temporário)
+            </button>
+            <p class="offline-info" id="offlineInfo"
+                style="display: none; font-size: 12px; color: #666; margin-top: 8px; text-align: center;">
+                <!-- Informação sobre período de graça será inserida aqui -->
+            </p>
+        </form>
+
+        <div class="machine-id-info">
+            <strong>ID da Máquina:</strong>
+            <span id="machineId">Carregando...</span>
+        </div>
+
+        <!-- License Status Info (hidden by default, shown after checking stored license) -->
+        <div class="license-status-info" id="licenseStatusInfo" style="display: none;">
+            <strong>Status da Licença:</strong>
+            <div class="status-badge" id="licenseStatus">Verificando...</div>
+            <p><strong>Expira em:</strong> <span id="licenseExpiry">-</span></p>
+            <p><strong>Tempo restante:</strong> <span id="licenseTimeRemaining">-</span></p>
+        </div>
+
+        <div class="help-text">
+            Precisa de ajuda? <a href="#" id="helpLink">Entre em contato</a>
+        </div>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        const input = document.getElementById('licenseKey');
+
+        // Auto-format key as user types
+        input.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/-/g, '').toUpperCase();
+
+            // Limit to 16 characters
+            if (value.length > 16) {
+                value = value.substring(0, 16);
+            }
+
+            // Add dashes every 4 characters
+            let formatted = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formatted += '-';
+                }
+                formatted += value[i];
+            }
+
+            e.target.value = formatted;
+        });
+
+        // Handle paste
+        input.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pastedData = e.clipboardData.getData('text').replace(/-/g, '').toUpperCase();
+
+            if (pastedData.length <= 16) {
+                let formatted = '';
+                for (let i = 0; i < pastedData.length; i++) {
+                    if (i > 0 && i % 4 === 0) {
+                        formatted += '-';
+                    }
+                    formatted += pastedData[i];
+                }
+                input.value = formatted;
+            }
+        });
+
+        // Focus input on load
+        input.focus();
+
+        // Get machine ID
+        ipcRenderer.invoke('get-machine-id').then(machineId => {
+            document.getElementById('machineId').textContent = machineId;
+        });
+
+        // Check if there's already a stored license and display its info
+        ipcRenderer.invoke('get-license-info').then(licenseInfo => {
+            if (licenseInfo && licenseInfo.key) {
+                displayLicenseInfo(licenseInfo);
+                checkOfflineAvailability(licenseInfo);
+            }
+        });
+
+        // Check if offline mode is available
+        function checkOfflineAvailability(licenseInfo) {
+            if (!licenseInfo || !licenseInfo.validatedAt) {
+                return; // No license stored, can't use offline
+            }
+
+            const lastValidation = new Date(licenseInfo.validatedAt);
+            const now = new Date();
+            const daysSinceValidation = Math.floor((now - lastValidation) / (1000 * 60 * 60 * 24));
+            const OFFLINE_GRACE_PERIOD = 30; // Same as in licenseService.js
+            const daysRemaining = OFFLINE_GRACE_PERIOD - daysSinceValidation;
+
+            const offlineBtn = document.getElementById('offlineBtn');
+            const offlineInfo = document.getElementById('offlineInfo');
+
+            if (daysRemaining > 0) {
+                // Can use offline mode
+                offlineBtn.style.display = 'block';
+                offlineInfo.style.display = 'block';
+
+                if (daysRemaining <= 7) {
+                    // Warning: grace period ending soon
+                    offlineInfo.innerHTML = `⚠️ Período de graça: <strong>${daysRemaining} dias restantes</strong>. Conecte-se à internet para validar.`;
+                    offlineInfo.style.color = '#f59e0b';
+                    offlineInfo.style.borderLeftColor = '#f59e0b';
+                } else {
+                    // Normal: plenty of time
+                    offlineInfo.innerHTML = `ℹ️ Você pode usar offline por mais <strong>${daysRemaining} dias</strong>.`;
+                    offlineInfo.style.color = '#0c5460';
+                    offlineInfo.style.borderLeftColor = '#0c5460';
+                }
+            } else {
+                // Grace period expired
+                offlineInfo.style.display = 'block';
+                offlineInfo.innerHTML = `❌ Período de graça expirado. Conexão à internet necessária.`;
+                offlineInfo.style.color = '#dc2626';
+                offlineInfo.style.borderLeftColor = '#dc2626';
+            }
+        }
+
+        // Calculate time remaining for a license
+        function calculateTimeRemaining(expiresAt) {
+            if (!expiresAt) {
+                return 'Licença perpétua';
+            }
+
+            const now = new Date();
+            const expiry = new Date(expiresAt);
+            const diffTime = expiry - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays < 0) {
+                return 'Expirada';
+            } else if (diffDays === 0) {
+                return 'Expira hoje';
+            } else if (diffDays === 1) {
+                return '1 dia';
+            } else if (diffDays < 30) {
+                return `${diffDays} dias`;
+            } else {
+                const months = Math.floor(diffDays / 30);
+                const days = diffDays % 30;
+                return `${months} ${months === 1 ? 'mês' : 'meses'}${days > 0 ? ` e ${days} dias` : ''}`;
+            }
+        }
+
+        // Display license information
+        function displayLicenseInfo(licenseData) {
+            const statusInfo = document.getElementById('licenseStatusInfo');
+            const statusBadge = document.getElementById('licenseStatus');
+            const expirySpan = document.getElementById('licenseExpiry');
+            const timeRemainingSpan = document.getElementById('licenseTimeRemaining');
+
+            if (!licenseData || !licenseData.expiresAt) {
+                statusBadge.textContent = 'Ativa (Perpétua)';
+                statusBadge.className = 'status-badge active';
+                expirySpan.textContent = 'Nunca';
+                timeRemainingSpan.textContent = 'Ilimitado';
+            } else {
+                const timeRemaining = calculateTimeRemaining(licenseData.expiresAt);
+                const now = new Date();
+                const expiry = new Date(licenseData.expiresAt);
+                const diffDays = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
+
+                if (diffDays < 0) {
+                    statusBadge.textContent = 'Expirada';
+                    statusBadge.className = 'status-badge expired';
+                } else if (diffDays <= 7) {
+                    statusBadge.textContent = 'Ativa (Expirando em breve)';
+                    statusBadge.className = 'status-badge warning';
+                } else {
+                    statusBadge.textContent = 'Ativa';
+                    statusBadge.className = 'status-badge active';
+                }
+
+                expirySpan.textContent = expiry.toLocaleDateString('pt-BR');
+                timeRemainingSpan.textContent = timeRemaining;
+            }
+
+            statusInfo.style.display = 'block';
+        }
+
+        // Form submission
+        document.getElementById('activationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const key = input.value.trim();
+
+            if (key.replace(/-/g, '').length !== 16) {
+                showMessage('Por favor, insira uma chave de licença válida (16 caracteres).', 'error');
+                return;
+            }
+
+            showLoading(true);
+            hideMessage();
+
+            try {
+                const result = await ipcRenderer.invoke('validate-license', key);
+
+                if (result.valid) {
+                    showMessage('✓ Licença ativada com sucesso! Iniciando aplicativo...', 'success');
+
+                    // Display license info before redirecting
+                    displayLicenseInfo(result);
+
+                    setTimeout(() => {
+                        ipcRenderer.send('license-activated');
+                    }, 2500);
+                } else {
+                    showLoading(false);
+                    showMessage(`✗ ${result.message || 'Erro ao validar licença'}`, 'error');
+
+                    if (result.offline) {
+                        document.getElementById('offlineBtn').style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                showLoading(false);
+                showMessage('✗ Erro ao conectar ao servidor de licenças. Verifique sua conexão.', 'error');
+                document.getElementById('offlineBtn').style.display = 'block';
+            }
+        });
+
+        // Offline mode button
+        document.getElementById('offlineBtn').addEventListener('click', async () => {
+            const licenseInfo = await ipcRenderer.invoke('get-license-info');
+
+            if (!licenseInfo) {
+                showMessage('❌ Nenhuma licença armazenada. Não é possível usar modo offline.', 'error');
+                return;
+            }
+
+            // Calculate days remaining
+            const lastValidation = new Date(licenseInfo.validatedAt);
+            const now = new Date();
+            const daysSinceValidation = Math.floor((now - lastValidation) / (1000 * 60 * 60 * 24));
+            const daysRemaining = 30 - daysSinceValidation;
+
+            if (daysRemaining <= 0) {
+                showMessage('❌ Período de graça offline expirado. Conecte-se à internet para validar sua licença.', 'error');
+                return;
+            }
+
+            showMessage(`✓ Iniciando em modo offline. ${daysRemaining} dias restantes de período de graça.`, 'info');
+
+            setTimeout(() => {
+                ipcRenderer.send('use-offline-mode');
+            }, 1500);
+        });
+
+        // Help link
+        document.getElementById('helpLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            ipcRenderer.send('open-help');
+        });
+
+        function showMessage(text, type) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+        }
+
+        function hideMessage() {
+            document.getElementById('message').style.display = 'none';
+        }
+
+        function showLoading(show) {
+            document.getElementById('loadingSpinner').style.display = show ? 'block' : 'none';
+            document.getElementById('activationForm').style.display = show ? 'none' : 'block';
+            document.getElementById('activateBtn').disabled = show;
+        }
+    </script>
+</body>
+
+</html>

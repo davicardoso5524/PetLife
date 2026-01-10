@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petlife - Despesas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar / Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-paw"></i>
+                <span>PetLife</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                <li><a href="packages.html"><i class="fa-solid fa-box-open"></i> Pacotes</a></li>
+                <li class="active"><a href="expenses.html"><i class="fa-solid fa-wallet"></i> Despesas</a></li>
+                <li><a href="bills-overview.html"><i class="fa-solid fa-file-invoice-dollar"></i> Contas a Pagar</a>
+                </li>
+                <li><a href="reports.html"><i class="fa-solid fa-chart-line"></i> Relatórios</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <h1><i class="fa-solid fa-wallet"></i> Controle de Despesas</h1>
+                        <p class="subtitle">Gerencie suas despesas de forma inteligente</p>
+                    </div>
+                </div>
+
+                <!-- Month Selector -->
+                <div class="month-selector">
+                    <button id="prev-month" class="month-nav-btn"><i class="fa-solid fa-chevron-left"></i></button>
+                    <select id="month-select" class="month-input">
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                    <select id="year-select" class="month-input"></select>
+                    <button id="next-month" class="month-nav-btn"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+
+                <button id="btn-copy-previous" class="btn-copy-previous" title="Copiar despesas do mês anterior">
+                    <i class="fa-solid fa-copy"></i> Copiar Mês Anterior
+                </button>
+            </header>
+
+            <!-- Cash Flow Summary Card -->
+            <div class="cash-flow-card" style="margin-top:2rem;">
+                <div class="cash-flow-header">
+                    <h2><i class="fa-solid fa-chart-line"></i> Fluxo de Caixa</h2>
+                    <span class="cash-flow-period" id="cf-period">Janeiro 2026</span>
+                </div>
+
+                <div class="cash-flow-grid">
+                    <!-- Revenue -->
+                    <div class="cf-item revenue">
+                        <div class="cf-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        <div class="cf-details">
+                            <span class="cf-label">Receita</span>
+                            <span class="cf-value" id="cf-revenue">R$ 0,00</span>
+                            <span class="cf-sublabel">Vendas do mês</span>
+                        </div>
+                    </div>
+
+                    <!-- Expenses -->
+                    <div class="cf-item expenses">
+                        <div class="cf-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                        <div class="cf-details">
+                            <span class="cf-label">Despesas</span>
+                            <span class="cf-value" id="cf-expenses">R$ 0,00</span>
+                            <span class="cf-sublabel">Total de gastos</span>
+                        </div>
+                    </div>
+
+                    <!-- Balance -->
+                    <div class="cf-item balance" id="cf-balance-card">
+                        <div class="cf-icon"><i class="fa-solid fa-wallet"></i></div>
+                        <div class="cf-details">
+                            <span class="cf-label">Saldo</span>
+                            <span class="cf-value" id="cf-balance">R$ 0,00</span>
+                            <span class="cf-sublabel" id="cf-balance-status">Calculando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Cards -->
+            <section class="dashboard-cards" style="margin-top:2rem;">
+                <div class="card card-total">
+                    <div class="card-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                    <div class="card-info">
+                        <h3>Total do Mês</h3>
+                        <p class="amount" id="summary-total">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="card card-pending">
+                    <div class="card-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div class="card-info">
+                        <h3>Pendentes</h3>
+                        <p class="amount" id="summary-pending">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="card card-comparison">
+                    <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="card-info">
+                        <h3>vs Mês Anterior</h3>
+                        <p class="amount" id="summary-comparison">--</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Tabs Navigation -->
+            <div class="tabs-container" style="margin-top:3rem;">
+                <div class="tabs">
+                    <button class="tab active" data-tab="monthly">
+                        <i class="fa-solid fa-calendar-days"></i> Visão Mensal
+                    </button>
+                    <button class="tab" data-tab="categories">
+                        <i class="fa-solid fa-list"></i> Cadastro
+                    </button>
+                    <button class="tab" data-tab="reports">
+                        <i class="fa-solid fa-chart-pie"></i> Relatórios
+                    </button>
+                </div>
+
+                <!-- Tab: Visão Mensal -->
+                <section id="tab-monthly" class="tab-content active">
+                    <div id="expenses-grid" class="expenses-grid">
+                        <!-- Expense cards will be injected here -->
+                        <div class="empty-state">
+                            <i class="fa-solid fa-inbox"></i>
+                            <p>Nenhuma categoria cadastrada ainda.</p>
+                            <p class="subtitle">Vá para a aba "Cadastro" para criar suas categorias de despesas.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Cadastro de Categorias -->
+                <section id="tab-categories" class="tab-content">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+                        <h2><i class="fa-solid fa-folder-open"></i> Categorias de Despesas</h2>
+                        <button id="btn-new-category" class="btn-primary">
+                            <i class="fa-solid fa-plus"></i> Nova Categoria
+                        </button>
+                    </div>
+                    <div id="categories-list" class="categories-grid">
+                        <!-- Categories will be injected here -->
+                    </div>
+                </section>
+
+                <!-- Tab: Relatórios -->
+                <section id="tab-reports" class="tab-content">
+                    <h2><i class="fa-solid fa-chart-column"></i> Análise de Despesas</h2>
+                    <div id="reports-container" class="glass-panel" style="margin-top:2rem; padding:2rem;">
+                        <p class="subtitle">Relatórios detalhados em breve...</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Nova/Editar Categoria -->
+    <div id="category-modal" class="modal">
+        <div class="modal-content premium-modal">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="category-modal-title">Nova Categoria</h2>
+                    <p class="modal-subtitle">Configure uma categoria de despesa</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeCategoryModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <form id="category-form" class="premium-form">
+                <input type="hidden" id="category-id">
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Nome da Despesa</label>
+                        <input type="text" id="category-name" placeholder="Ex: Aluguel, Energia, Água..." required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Tipo</label>
+                        <select id="category-type" required>
+                            <option value="">Selecione...</option>
+                            <option value="fixa">Fixa</option>
+                            <option value="variavel">Variável</option>
+                            <option value="pessoal">Pessoal</option>
+                            <option value="operacional">Operacional</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Valor Padrão (Opcional)</label>
+                        <input type="number" id="category-default-value" step="0.01" min="0" placeholder="0,00">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeCategoryModal()">Cancelar</button>
+                    <button type="submit" class="btn-save-premium">
+                        Salvar <i class="fa-solid fa-check"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Histórico de Despesa -->
+    <div id="history-modal" class="modal">
+        <div class="modal-content premium-modal" style="max-width:700px;">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="history-modal-title">Histórico</h2>
+                    <p class="modal-subtitle" id="history-modal-subtitle">Últimos 12 meses</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeHistoryModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <div id="history-content" class="premium-form" style="max-height:500px; overflow-y:auto;">
+                <!-- History data will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Salvo com sucesso!</div>
+
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="logout-modal-content modal-content">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h2>Sair do Sistema?</h2>
+            <p>Você será desconectado e precisará fazer login novamente para acessar o sistema.</p>
+            <div class="logout-actions">
+                <button type="button" class="btn-cancel-logout" onclick="cancelLogout()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-logout" id="btn-confirm-logout" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/expenses.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petlife - Gestão Financeira</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar / Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-paw"></i>
+                <span>PetLife</span>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                <li><a href="packages.html"><i class="fa-solid fa-box-open"></i> Pacotes</a></li>
+                <li><a href="expenses.html"><i class="fa-solid fa-wallet"></i> Despesas</a></li>
+                <li><a href="bills-overview.html"><i class="fa-solid fa-file-invoice-dollar"></i> Contas a Pagar</a>
+                </li>
+                <li><a href="reports.html"><i class="fa-solid fa-chart-line"></i> Relatórios</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center;">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <h1>Gestão Financeira</h1>
+                        <p class="subtitle">Visão geral do seu negócio.</p>
+                    </div>
+                </div>
+                <div id="clock-display" class="premium-clock">--:--</div>
+            </header>
+
+            <!-- Dashboard Cards -->
+            <section class="dashboard-cards">
+                <div class="card card-day">
+                    <div class="card-icon"><i class="fa-solid fa-calendar-day"></i></div>
+                    <div class="card-info">
+                        <h3>Hoje</h3>
+                        <p class="amount" id="dash-day">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="card card-month">
+                    <div class="card-icon"><i class="fa-solid fa-calendar-week"></i></div>
+                    <div class="card-info">
+                        <h3>Mês Atual</h3>
+                        <p class="amount" id="dash-month">R$ 0,00</p>
+                    </div>
+                </div>
+                <div class="card card-year">
+                    <div class="card-icon"><i class="fa-solid fa-calendar"></i></div>
+                    <div class="card-info">
+                        <h3>Ano Atual</h3>
+                        <p class="amount" id="dash-year">R$ 0,00</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actions Bar -->
+            <section class="actions-bar" style="display:flex; justify-content:flex-end; margin-bottom:2rem;">
+                <button id="btn-new-sale" class="btn-primary"
+                    style="max-width:250px; padding:1rem 2rem; font-size:1.1rem; box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);">
+                    <i class="fa-solid fa-plus"></i> Novo Lançamento
+                </button>
+            </section>
+
+            <!-- Recent Activity -->
+            <div class="content-grid" style="grid-template-columns: 1fr; margin-top:3rem;">
+                <section class="recent-section">
+                    <div class="glass-panel">
+                        <div class="panel-header"
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+                            <h2 style="margin-bottom:0;"><i class="fa-solid fa-clock-rotate-left"></i> Atividade Recente
+                            </h2>
+                            <button id="btn-clear-recent" class="btn-icon-sm" title="Limpar lista visualmente">
+                                <i class="fa-solid fa-broom"></i>
+                            </button>
+                        </div>
+                        <ul class="recent-list" id="recent-list">
+                            <!-- Items will be injected by JS -->
+                            <li class="empty-state">Nenhum lançamento recente.</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- New Sale Modal -->
+    <div id="new-sale-modal" class="modal">
+        <div class="modal-content premium-modal">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title">Novo Lançamento</h2>
+                    <p class="modal-subtitle">Registre suas vendas diárias</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeSaleModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <form id="sales-form" class="premium-form">
+                <!-- Date Row -->
+                <div class="form-row">
+                    <div class="input-wrapper date-wrapper">
+                        <label>Data da Venda</label>
+                        <input type="date" id="sale-date" required>
+                    </div>
+                </div>
+
+                <!-- Payments Grid -->
+                <div class="payment-section">
+                    <label class="section-label">Formas de Pagamento</label>
+                    <div class="payment-grid-premium">
+                        <!-- Money -->
+                        <div class="input-card money">
+                            <i class="fa-solid fa-money-bill-wave icon"></i>
+                            <div class="input-data">
+                                <label>Dinheiro</label>
+                                <input type="number" id="val-money" class="bare-input payment-input" step="0.01" min="0"
+                                    placeholder="0,00">
+                            </div>
+                        </div>
+                        <!-- Pix -->
+                        <div class="input-card pix">
+                            <i class="fa-brands fa-pix icon"></i>
+                            <div class="input-data">
+                                <label>Pix</label>
+                                <input type="number" id="val-pix" class="bare-input payment-input" step="0.01" min="0"
+                                    placeholder="0,00">
+                            </div>
+                        </div>
+                        <!-- Debit -->
+                        <div class="input-card debit">
+                            <i class="fa-regular fa-credit-card icon"></i>
+                            <div class="input-data">
+                                <label>Débito</label>
+                                <input type="number" id="val-debit" class="bare-input payment-input" step="0.01" min="0"
+                                    placeholder="0,00">
+                            </div>
+                        </div>
+                        <!-- Credit -->
+                        <div class="input-card credit">
+                            <i class="fa-solid fa-credit-card icon"></i>
+                            <div class="input-data">
+                                <label>Crédito</label>
+                                <input type="number" id="val-credit" class="bare-input payment-input" step="0.01"
+                                    min="0" placeholder="0,00">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Observation -->
+                <div class="form-row obs-row">
+                    <label class="section-label">Observação <small>(Opcional)</small></label>
+                    <div class="input-wrapper">
+                        <textarea id="sale-obs" placeholder="Adicione uma nota..." rows="1"></textarea>
+                        <i class="fa-regular fa-comment-dots obs-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Footer Action -->
+                <div class="modal-footer">
+                    <div class="total-badge">
+                        <span>Total do Dia</span>
+                        <h3 id="live-total">R$ 0,00</h3>
+                    </div>
+                    <button type="submit" class="btn-save-premium">
+                        Confirmar <i class="fa-solid fa-check"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Salvo com sucesso!</div>
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="logout-modal-content modal-content">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h2>Sair do Sistema?</h2>
+            <p>Você será desconectado e precisará fazer login novamente para acessar o sistema.</p>
+            <div class="logout-actions">
+                <button type="button" class="btn-cancel-logout" onclick="cancelLogout()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-logout" id="btn-confirm-logout" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="logout-modal-content modal-content">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h2>Sair do Sistema?</h2>
+            <p>Você será desconectado e precisará fazer login novamente para acessar o sistema.</p>
+            <div class="logout-actions">
+                <button type="button" class="btn-cancel-logout" onclick="cancelLogout()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-logout" id="btn-confirm-logout" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

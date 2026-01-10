@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetLife - Painel Administrativo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+        <!-- Sidebar / Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-paw"></i>
+                <span>PetLife</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a></li>
+                <li><a href="packages.html"><i class="fa-solid fa-box-open"></i> Pacotes</a></li>
+                <li><a href="expenses.html"><i class="fa-solid fa-wallet"></i> Despesas</a></li>
+                <li><a href="bills-overview.html"><i class="fa-solid fa-file-invoice-dollar"></i> Contas a Pagar</a>
+                </li>
+                <li><a href="reports.html"><i class="fa-solid fa-chart-line"></i> Relatórios</a></li>
+                <li class="active"><a href="admin.html"><i class="fa-solid fa-user-shield"></i> Admin</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <h1><i class="fa-solid fa-user-shield"></i> Painel Administrativo</h1>
+                        <p class="subtitle">Gerenciamento de usuários do sistema</p>
+                    </div>
+                </div>
+
+                <button id="btn-new-user" class="btn-primary">
+                    <i class="fa-solid fa-user-plus"></i> Novo Usuário
+                </button>
+            </header>
+
+            <!-- Users Table -->
+            <section style="margin-top:2rem;">
+                <div class="glass-panel" style="padding:2rem;">
+                    <h2 style="margin-bottom:1.5rem;"><i class="fa-solid fa-users"></i> Usuários Cadastrados</h2>
+
+                    <div class="table-responsive">
+                        <table class="admin-table" id="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Usuário</th>
+                                    <th>Nome Completo</th>
+                                    <th>Função</th>
+                                    <th>Status</th>
+                                    <th>Último Login</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-tbody">
+                                <tr>
+                                    <td colspan="6" style="text-align:center; padding:2rem;">
+                                        <i class="fa-solid fa-spinner fa-spin"
+                                            style="font-size:2rem; color:#667eea;"></i>
+                                        <p style="margin-top:1rem; color:#6b7280;">Carregando usuários...</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal: Novo/Editar Usuário -->
+    <div id="user-modal" class="modal">
+        <div class="modal-content premium-modal">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="user-modal-title">Novo Usuário</h2>
+                    <p class="modal-subtitle">Preencha os dados do usuário</p>
+                </div>
+                <button type="button" class="btn-close-modal" onclick="closeUserModal()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <form id="user-form" class="premium-form">
+                <input type="hidden" id="user-id">
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Usuário</label>
+                        <input type="text" id="user-username" placeholder="Ex: joao.silva" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Nome Completo</label>
+                        <input type="text" id="user-fullname" placeholder="Ex: João Silva">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Senha</label>
+                        <input type="password" id="user-password" placeholder="Deixe em branco para manter a atual">
+                        <small style="color:#6b7280; font-size:0.85rem;">Mínimo 6 caracteres</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label>Função</label>
+                        <select id="user-role" required>
+                            <option value="user">Usuário</option>
+                            <option value="admin">Administrador</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-wrapper">
+                        <label style="display:flex; align-items:center; gap:0.5rem;">
+                            <input type="checkbox" id="user-active" checked style="width:auto;">
+                            <span>Usuário Ativo</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeUserModal()">Cancelar</button>
+                    <button type="submit" class="btn-save-premium">
+                        Salvar <i class="fa-solid fa-check"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Salvo com sucesso!</div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="delete-modal-content modal-content">
+            <div class="delete-icon">
+                <i class="fa-solid fa-trash-alt"></i>
+            </div>
+            <h2>Excluir Usuário?</h2>
+            <p id="delete-message">Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.</p>
+            <div class="delete-user-info" id="delete-user-info">
+                <!-- User info will be inserted here -->
+            </div>
+            <div class="delete-actions">
+                <button type="button" class="btn-cancel-delete" onclick="cancelDelete()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-delete" id="btn-confirm-delete" onclick="confirmDelete()">
+                    <i class="fa-solid fa-trash"></i> Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="logout-modal-content modal-content">
+            <div class="logout-icon">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </div>
+            <h2>Sair do Sistema?</h2>
+            <p>Você será desconectado e precisará fazer login novamente para acessar o sistema.</p>
+            <div class="logout-actions">
+                <button type="button" class="btn-cancel-logout" onclick="cancelLogout()">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-confirm-logout" id="btn-confirm-logout" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
