@@ -4,7 +4,7 @@
 
 ![PetLife Banner](docs/banner.png)
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/seu-usuario/petlife)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/davicardoso5524/petlife)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)]()
 [![Electron](https://img.shields.io/badge/Electron-39.2.7-47848F.svg)](https://www.electronjs.org/)
@@ -72,7 +72,7 @@
 
 Baixe a versão mais recente do instalador Windows:
 
-👉 **[Download PetLife Setup.exe](https://github.com/seu-usuario/petlife/releases/latest)**
+👉 **[Download PetLife Setup.exe](https://github.com/davicardoso5524/petlife/releases/latest)**
 
 ### Passo 2: Obter Chave de Licença
 
@@ -173,7 +173,7 @@ Se você deseja compilar o projeto do código-fonte:
 
 ```bash
 # 1. Clonar o repositório
-git clone https://github.com/seu-usuario/petlife.git
+git clone https://github.com/davicardoso5524/petlife.git
 cd petlife
 
 # 2. Instalar dependências
@@ -221,8 +221,8 @@ Contribuições são bem-vindas! Se você tem sugestões de melhorias:
 
 Encontrou um bug ou precisa de ajuda?
 
-- 🐛 [Reportar Bug](https://github.com/seu-usuario/petlife/issues/new?labels=bug)
-- 💡 [Solicitar Feature](https://github.com/seu-usuario/petlife/issues/new?labels=enhancement)
+- 🐛 [Reportar Bug](https://github.com/davicardoso5524/petlife/issues/new?labels=bug)
+- 💡 [Solicitar Feature](https://github.com/davicardoso5524/petlife/issues/new?labels=enhancement)
 - 📧 Email: cardosinho524@gmail.com
 
 ---
