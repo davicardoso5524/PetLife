@@ -4,7 +4,7 @@
 
 ![PetLife Banner](docs/banner.png)
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/davicardoso5524/petlife)
+[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/davicardoso5524/petlife)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)]()
 [![Electron](https://img.shields.io/badge/Electron-39.2.7-47848F.svg)](https://www.electronjs.org/)
@@ -72,7 +72,9 @@
 
 Baixe a versão mais recente do instalador Windows:
 
-👉 **[Download PetLife Setup.exe](https://github.com/davicardoso5524/PetLife/releases/download/v1.0.0/PetLife.Setup.1.0.0.exe)**
+👉 **[Download PetLife Setup.exe](https://github.com/davicardoso5524/PetLife/releases/latest/download/PetLife-Setup-1.0.1.exe)**
+
+> 🆕 **Novidade:** A partir da versão 1.0.1, o PetLife possui **atualização automática**! Você será notificado quando houver novas versões disponíveis.
 
 ### Passo 2: Obter Chave de Licença
 
@@ -186,7 +188,7 @@ npm run electron
 npm run build
 ```
 
-O instalador será gerado em `dist/PetLife Setup 1.0.0.exe`
+O instalador será gerado em `dist/PetLife Setup 1.0.1.exe`
 
 ---
 
@@ -229,6 +231,12 @@ Encontrou um bug ou precisa de ajuda?
 
 ## 🗺️ Roadmap
 
+### ✅ Concluído
+- [x] Sistema de atualização automática
+- [x] Licenciamento integrado
+- [x] Gestão completa de vendas e pacotes
+
+### 🚧 Em Desenvolvimento
 - [ ] Versão para macOS
 - [ ] Versão para Linux
 - [ ] Backup automático na nuvem
