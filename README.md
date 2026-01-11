@@ -72,7 +72,7 @@
 
 Baixe a versão mais recente do instalador Windows:
 
-👉 **[Download PetLife Setup.exe](https://github.com/davicardoso5524/PetLife/releases/download/v1.0.6/PetLife.Setup.1.0.6.exe)**
+👉 **[Download PetLife Setup.exe](https://github.com/davicardoso5524/PetLife/releases/download/v1.0.10/PetLife.Setup.1.0.10.exe)**
 
 > 🆕 **Novidade:** A partir da versão 1.0.1, o PetLife possui **atualização automática**! Você será notificado quando houver novas versões disponíveis.
 
