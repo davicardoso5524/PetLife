@@ -3,7 +3,7 @@
 (function () {
     'use strict';
 
-    const API_BASE = 'http://localhost:3000/api';
+    const API_URL = API_BASE || 'http://localhost:3000/api';
     let currentYear = new Date().getFullYear();
 
     const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -52,7 +52,7 @@
 
     async function loadAnnualSummary() {
         try {
-            const response = await fetch(`${API_BASE}/bills/annual-summary?year=${currentYear}`);
+            const response = await fetch(`${API_URL}/bills/annual-summary?year=${currentYear}`);
             const data = await response.json();
 
             // Calculate totals

@@ -1,6 +1,6 @@
 // ===== BILLS MODULE (Contas a Pagar) =====
 
-const API_BASE = 'http://localhost:3000/api';
+const API_URL = API_BASE || 'http://localhost:3000/api';
 
 // State
 let currentMonth = new Date().getMonth() + 1;
@@ -129,7 +129,7 @@ async function loadMonthlyData() {
         const search = document.getElementById('search-input').value;
         const status = document.getElementById('status-filter').value;
 
-        let url = `${API_BASE}/bills?year=${currentYear}&month=${currentMonth}`;
+        let url = `${API_URL}/bills?year=${currentYear}&month=${currentMonth}`;
         if (status !== 'all') url += `&status=${status}`;
         if (search) url += `&search=${encodeURIComponent(search)}`;
 
@@ -147,7 +147,7 @@ async function loadMonthlyData() {
 
 async function loadSummary() {
     try {
-        const response = await fetch(`${API_BASE}/bills/summary?year=${currentYear}&month=${currentMonth}`);
+        const response = await fetch(`${API_URL}/bills/summary?year=${currentYear}&month=${currentMonth}`);
         const data = await response.json();
 
         // Update summary cards
@@ -386,7 +386,7 @@ async function saveBillForm(e) {
     const data = { description, amount, due_date, category, supplier, notes, total_installments };
 
     try {
-        const url = id ? `${API_BASE}/bills/${id}` : `${API_BASE}/bills`;
+        const url = id ? `${API_URL}/bills/${id}` : `${API_URL}/bills`;
         const method = id ? 'PUT' : 'POST';
 
         const response = await fetch(url, {
@@ -412,7 +412,7 @@ async function saveBillForm(e) {
 
 async function updateBillStatus(id, status) {
     try {
-        const response = await fetch(`${API_BASE}/bills/${id}/status`, {
+        const response = await fetch(`${API_URL}/bills/${id}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status })
@@ -436,7 +436,7 @@ async function deleteBill(id) {
         'Tem certeza que deseja excluir esta conta?',
         async () => {
             try {
-                const response = await fetch(`${API_BASE}/bills/${id}`, {
+                const response = await fetch(`${API_URL}/bills/${id}`, {
                     method: 'DELETE'
                 });
 
