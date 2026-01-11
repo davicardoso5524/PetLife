@@ -431,9 +431,42 @@ db.serialize(() => {
 
                     db.run(`CREATE TABLE ${v10Flag} (id INTEGER PRIMARY KEY)`);
                     console.log('Migração v10 (Licenciamento) concluída.');
+                    ensureAdminExists();
                 });
             } else {
                 console.log('Banco de dados versão v10 (Licenciamento).');
+                ensureAdminExists();
+            }
+        });
+    }
+
+    // Ensure admin user always exists (runs after all migrations)
+    function ensureAdminExists() {
+        const bcrypt = require('bcryptjs');
+
+        db.get(`SELECT id FROM users WHERE username = 'admin'`, (err, row) => {
+            if (err) {
+                console.error('Erro ao verificar usuário admin:', err);
+                return;
+            }
+
+            if (!row) {
+                // Admin doesn't exist, create it
+                const defaultPassword = 'admin123';
+                const passwordHash = bcrypt.hashSync(defaultPassword, 10);
+
+                db.run(`INSERT INTO users (username, password_hash, full_name, role, is_active)
+                        VALUES (?, ?, ?, ?, ?)`,
+                    ['admin', passwordHash, 'Administrador', 'admin', 1],
+                    (err) => {
+                        if (err) {
+                            console.error('❌ Erro ao criar usuário admin:', err);
+                        } else {
+                            console.log('✅ Usuário admin criado (username: admin, password: admin123)');
+                        }
+                    });
+            } else {
+                console.log('✓ Usuário admin já existe.');
             }
         });
     }
